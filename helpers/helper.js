@@ -5,24 +5,23 @@ module.exports = {
     
     LINK_LIFE: 604800000,
 
-    genCode : async function (_link) {
+    genCode : async function (link) {
         let linkCode = randomstring.generate(6);
         let status = false;
-
-        console.log(linkCode);
+        
         try {
 
             let active_link = await Active_link.findOne({ linkCode });
-            let link = await Active_link.findOne({ link: _link });
+            let result = await Active_link.findOne({ link: link });
 
-            if (link && Date.now() - link.expiration < module.exports.LINK_LIFE) { 
+            if (result && Date.now() - result.expiration < module.exports.LINK_LIFE) { 
 
                 status = true;
-                return {linkCode: link.linkCode, status};
+                return {linkCode: result.linkCode, status};
 
-            } else if (link) {
+            } else if (result) {
                 status = false;
-                await Active_link.deleteOne({ link: link.link });
+                await Active_link.deleteOne({ link: result.link });
             }
 
 
@@ -85,5 +84,5 @@ module.exports = {
         }
     }
 
-    
+
 }
