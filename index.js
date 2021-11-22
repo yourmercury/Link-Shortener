@@ -1,14 +1,14 @@
 const app = require('express')();
 const mongoose = require('mongoose');
 const controller = require("./controllers/controller");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3100;
 
 //Uri to MongoDB
 const uri = "mongodb+srv://user:059222@link-shortener.aydgv.mongodb.net/database?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://user:059222@link-shortener.aydgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-
-//This IIFE connects to MongoDB and Makes sure that only after a succesfull connection will the Routes in the Controller be open.
-+ async function () {
+    //This IIFE connects to MongoDB and Makes sure that only after a succesfull connection will the Routes in the Controller be open.
+(async function () {
     try {
         await mongoose.connect(uri, {
             useNewUrlParser: true,
@@ -16,7 +16,7 @@ const uri = "mongodb+srv://user:059222@link-shortener.aydgv.mongodb.net/database
             useFindAndModify: false,
             useCreateIndex: true
         });
-        
+
         mongoose.connection.on('error', err => {
             console.log(err);
         });
@@ -32,7 +32,7 @@ const uri = "mongodb+srv://user:059222@link-shortener.aydgv.mongodb.net/database
     catch (error) {
         console.log(error);
     }
-}()
+}());
 
 
 //Server starts Listening

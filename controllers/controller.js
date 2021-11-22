@@ -1,11 +1,10 @@
-const Active_link = require("../models/model")();
 const generate = require("randomstring").generate;
 const { genLink, getLink } = require("../helpers/helper");
 const bodyParser = require("body-parser");
 const validator = require("validator");
+const cors = require("cors")
 
 url_validator_options = {
-
     protocols: ['http', 'https', 'ftp'],
     require_tld: true,
     require_protocol: true,
@@ -16,8 +15,7 @@ url_validator_options = {
     host_blacklist: false,
     allow_trailing_dot: false,
     allow_protocol_relative_urls: false,
-    disallow_auth: false
-
+    disallow_auth: false,
 }
 
 
@@ -25,11 +23,13 @@ module.exports = function (app) {
 
     app.use(bodyParser.json());
 
+    app.use(cors());
+
     app.post("/shorten", async (req, res) => {
         let link = req.body.link;
         let host = req.get("host");
 
-        let isLink = validator.isURL(link, url_validator_options)
+        let isLink = validator.isURL(link, url_validator_options);
 
         if (!isLink) {
             res.status(500).json({ error: "not a valid link", status: false });
@@ -43,7 +43,7 @@ module.exports = function (app) {
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({error: "server error", status: false})
+            res.status(500).json({ error: "server error", status: false })
         }
     });
 
@@ -61,11 +61,11 @@ module.exports = function (app) {
                 return;
             }
 
-            //res.redirect(`${link}`);
+            // res.redirect(`${link}`);
             res.status(200).json({ link: link, status: true });
         }
         catch (error) {
-            throw new Error(error)
+            throw new Error(error);
         }
 
     });
