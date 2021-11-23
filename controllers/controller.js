@@ -1,5 +1,5 @@
 const generate = require("randomstring").generate;
-const { genLink, getLink } = require("../helpers/helper");
+const { genLink, getLink, getTrendingLinks } = require("../helpers/helper");
 const bodyParser = require("body-parser");
 const validator = require("validator");
 const cors = require("cors")
@@ -47,6 +47,21 @@ module.exports = function (app) {
         }
     });
 
+    app.post("/trending", async (req, res) => {
+        let data = req.body;
+        let host = req.get("host");
+
+        try {
+
+            
+            let links = await getTrendingLinks(data);
+            res.status(200).json({ links: links, host:host,  status: true });
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+
+    });
 
 
     app.get("/:linkCode", async (req, res) => {
@@ -61,8 +76,8 @@ module.exports = function (app) {
                 return;
             }
 
-            // res.redirect(`${link}`);
-            res.status(200).json({ link: link, status: true });
+            res.redirect(`${link}`);
+            // res.status(200).json({ link: link, status: true });
         }
         catch (error) {
             throw new Error(error);

@@ -31,14 +31,13 @@ module.exports = {
 
                 return { linkCode, status };
             } else if (active_link) {
-                console.log(active_link);
                 return await module.exports.genCode(link);
             } else {
                 return { linkCode, status };
             }
         }
         catch (error) {
-            throw new Error(error);
+            throw (error);
         }
     },
 
@@ -53,7 +52,7 @@ module.exports = {
                 Active_link.create({ link, linkCode, expiration: Number(Date.now()), clicks: 0 }, (error, payload) => {
                     if (error) {
                         throw new Error(error);
-                    } else console.log(payload + " at genLink");
+                    }
                 });
             }
 
@@ -61,7 +60,7 @@ module.exports = {
         }
 
         catch (error) {
-            throw new Error(error)
+            throw (error)
         }
     },
 
@@ -81,9 +80,30 @@ module.exports = {
             }
         }
         catch (error) {
-            throw new Error(error);
+            throw (error);
+        }
+    },
+
+
+    getTrendingLinks: async function (arr) {
+        try {
+            let myLinks = [];
+
+            for (let i = 0; i < arr.length; i++){
+                let code = arr[i].split("/")[1];
+                let data = await Active_link.findOne({ linkCode: code });
+                myLinks.push(data);
+            }
+
+            let links = await Active_link.find({ clicks: { $gt: 0 } }).
+                limit(10).
+                sort('-clicks')
+                .sort('-expiration');
+
+            return {trending: links, myLinks: myLinks};
+        }
+        catch (error) {
+            throw (error);
         }
     }
-
-
 }
