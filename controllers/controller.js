@@ -3,6 +3,7 @@ const { genLink, getLink, getTrendingLinks } = require("../helpers/helper");
 const bodyParser = require("body-parser");
 const validator = require("validator");
 const cors = require("cors")
+require("dotenv").config()
 
 url_validator_options = {
     protocols: ['http', 'https', 'ftp'],
@@ -51,9 +52,7 @@ module.exports = function (app) {
         let data = req.body;
         let host = req.get("host");
 
-        try {
-
-            
+        try {            
             let links = await getTrendingLinks(data);
             res.status(200).json({ links: links, host:host,  status: true });
         }
