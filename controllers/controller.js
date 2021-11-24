@@ -3,7 +3,6 @@ const { genLink, getLink, getTrendingLinks } = require("../helpers/helper");
 const bodyParser = require("body-parser");
 const validator = require("validator");
 const cors = require("cors")
-require("dotenv").config()
 
 url_validator_options = {
     protocols: ['http', 'https', 'ftp'],
