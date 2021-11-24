@@ -4,6 +4,7 @@ const controller = require("./controllers/controller");
 const PORT = process.env.PORT || 3100;
 
 //Uri to MongoDB
+// const uri = process.env.MONGO_DB_CREDENTIAL;
 const uri = process.env.MONGO_DB_CREDENTIAL;
 
     //This IIFE connects to MongoDB and Makes sure that only after a succesfull connection will the Routes in the Controller be open.
